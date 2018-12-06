@@ -1,22 +1,12 @@
+#!/usr/bin/env python3
+
 from lxml import html
-#from urllib.parse import urljoin
 import requests
 import unicodecsv as csv
 import argparse
 
-def parse(zipcode, type=filter):
-    #https://www.zillow.com/homes/for_sale/94404_zip/50000-125000000_price/
-    #house: house,mobile,land_type
-    #https://www.zillow.com/homes/for_rent/San-Mateo-CA-94404/house,mobile,land_type/97704_rid/50000-125000000_price/37.582439,-122.225905,37.526643,-122.31371_rect/13_zm/
-
- # url = urljoin('https://www.zillow.com', type, zipcode + "_zip", str(pricemin) + '-' + str(pricemax) + '_price')
-  if filter=="newest":
-    url = "https://www.zillow.com/homes/for_sale/{0}/0_singlestory/days_sort".format(zipcode)
-  elif filter == "cheapest":
-    url = "https://www.zillow.com/homes/for_sale/{0}/0_singlestory/pricea_sort/".format(zipcode)
-  else:
-    url = "https://www.zillow.com/homes/for_sale/{0}_rb/?fromHomePage=true&shouldFireSellPageImplicitClaimGA=false&fromHomePageTab=buy".format(zipcode)
-
+def parse(zipcode, pricemin, pricemax, hometype):
+  url = joinurl(zipcode, pricemin, pricemax, hometype)
   for i in range(5):
     # try:
     headers= {
@@ -71,23 +61,31 @@ def parse(zipcode, type=filter):
     # except:
     #   print ("Failed to process the page",url)
 
+def joinurl(zipcode, pricemin, pricemax, hometype):
+  return('https://www.zillow.com/homes/for_rent/' + zipcode + "_rb/" + hometype + '/' + str(pricemin) + '-' + str(pricemax) + '_price')
+
+
 if __name__=="__main__":
   argparser = argparse.ArgumentParser(formatter_class=argparse.RawTextHelpFormatter)
-  #zipcode = input('Zipcode: ')
-  #pricemin = input('Lowest price: ')
-  #pricemax = input('Highest price: ')
-  argparser.add_argument('zipcode', help = '')
-  sortorder_help = """
-    available sort orders are :
-    newest : Latest property details,
-    cheapest : Properties with cheapest price
+  argparser.add_argument('zipcode', help = "zipcode you're interested in finding a home")
+  argparser.add_argument('pricemin', help = 'minimum price')
+  argparser.add_argument('pricemax', help = 'maximum price')
+  argparser.add_argument('hometype', help = 'types of homes can be ')
+  hometype_help = """
+    Types of homes are :
+    apartments
+    houses
+    condoes
+    townhomes
     """
-  argparser.add_argument('sort', nargs='?', help = sortorder_help, default ='Homes For You')
+  argparser.add_argument('hometype', nargs='*', help = hometype_help, default ='apartments')
   args = argparser.parse_args()
   zipcode = args.zipcode
-  sort = args.sort
+  pricemin = args.pricemin
+  pricemax = args.pricemax
+  hometype = args.hometype
   print ("Fetching data for %s"%(zipcode))
-  scraped_data = parse(zipcode, sort)
+  scraped_data = parse(zipcode, pricemin, pricemax, hometype )
   print ("Writing data to output file")
   with open("properties-%s.csv"%(zipcode), 'wb')as csvfile:
     fieldnames = ['title','address','city','state','postal_code','price','facts and features','real estate provider','url']
