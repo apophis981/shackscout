@@ -7,6 +7,16 @@ import argparse
 
 def parse(zipcode, pricemin, pricemax, hometype):
   url = joinurl(zipcode, pricemin, pricemax, hometype)
+  url = 'https://www.zillow.com/homes/for_rent/San-Mateo-CA-94404/apartment_duplex_type/97704_rid/495085-742628_price/2000-3000_mp/37.583561,-122.225218,37.525519,-122.314396_rect/13_zm/'
+  filter = 'newest'
+  if filter=="newest":
+    url = "https://www.zillow.com/homes/for_sale/{0}/0_singlestory/days_sort".format(zipcode)
+  elif filter == "cheapest":
+    url = "https://www.zillow.com/homes/for_sale/{0}/0_singlestory/pricea_sort/".format(zipcode)
+  else:
+    url = "https://www.zillow.com/homes/for_sale/{0}_rb/?fromHomePage=true&shouldFireSellPageImplicitClaimGA=false&fromHomePageTab=buy".format(zipcode)
+
+  print("Fetching: " + url)
   for i in range(5):
     # try:
     headers= {
@@ -15,11 +25,12 @@ def parse(zipcode, pricemin, pricemax, hometype):
           'accept-language':'en-GB,en;q=0.8,en-US;q=0.6,ml;q=0.4',
           'cache-control':'max-age=0',
           'upgrade-insecure-requests':'1',
-          'user-agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
+          'user-agent':'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.80 Safari/537.36'
     }
     response = requests.get(url,headers=headers)
     print(response.status_code)
     parser = html.fromstring(response.text)
+    print(response.text)
     search_results = parser.xpath("//div[@id='search-results']//article")
     properties_list = []
 
@@ -62,7 +73,20 @@ def parse(zipcode, pricemin, pricemax, hometype):
     #   print ("Failed to process the page",url)
 
 def joinurl(zipcode, pricemin, pricemax, hometype):
-  return('https://www.zillow.com/homes/for_rent/' + zipcode + "_rb/" + hometype + '/' + str(pricemin) + '-' + str(pricemax) + '_price')
+  hometype = str(hometype)
+  hometype = hometype.replace('apartment', 'apartment_duplex_type')
+  hometype = hometype.replace('house', 'house,mobile,land_type')
+  hometype = hometype.replace('condo', 'condo_type')
+  hometype = hometype.replace('townhome', 'townhouse_type')
+  return('https://www.zillow.com/homes/for_rent/'
+          + zipcode
+          + '/'
+          + hometype
+          + '/'
+          + str(pricemin)
+          + '-'
+          + str(pricemax)
+          + '_mp')
 
 
 if __name__=="__main__":
@@ -70,15 +94,16 @@ if __name__=="__main__":
   argparser.add_argument('zipcode', help = "zipcode you're interested in finding a home")
   argparser.add_argument('pricemin', help = 'minimum price')
   argparser.add_argument('pricemax', help = 'maximum price')
-  argparser.add_argument('hometype', help = 'types of homes can be ')
   hometype_help = """
-    Types of homes are :
-    apartments
-    houses
-    condoes
-    townhomes
+    Comma separated list of types you're interested in
+    Types of homes are:
+    apartment
+    house
+    condo
+    townhome
     """
-  argparser.add_argument('hometype', nargs='*', help = hometype_help, default ='apartments')
+  argparser.add_argument('hometype', help = hometype_help, default = 'apartment')
+  #argparser.add_argument('hometype', nargs='*', help = hometype_help, default ='apartment')
   args = argparser.parse_args()
   zipcode = args.zipcode
   pricemin = args.pricemin
