@@ -16,4 +16,4 @@ pip install feedparser
 `python3 craigsrss.py`
 
 ## Depricated zillow scraper usage
-`python3 zillow_scraper.py [zip code] [price_min] [price_max] [hometype]``
+`python3 zillow_scraper.py [zip code] [price_min] [price_max] [hometype]`
