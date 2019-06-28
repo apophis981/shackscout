@@ -1,6 +1,6 @@
 import argparse
 
-def get_input():
+def get_input(input_args):
     parser = argparse.ArgumentParser(description='Get user search specifics')
 
     # Mandatory arguements
@@ -28,5 +28,5 @@ def get_input():
                         action='store_true')
 
 
-    args = parser.parse_args()
+    args = parser.parse_args(input_args)
     return args

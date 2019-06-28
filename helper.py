@@ -24,7 +24,7 @@ def get_region():
             print("Region discovery failed")
             print("Please enter your local region such that")
             found = input(
-                '[your region].craigslist.org goes to your local region: ')
+                '[your region].craigslist.org goes to your local craigslist page: ')
     return found
 
 def get_new_listings(region):
@@ -34,11 +34,12 @@ def get_new_listings(region):
     return urls
 
 def scrape(link):
-    m = re.search('.*\/([a-z]+)\/apa\/d\/([^\/]+)\/(\d+)\.html', url)
+    print(link)
+    m = re.search('.*\/([a-z]+)\/apa\/d\/([^\/]+)\/(\d+)\.html', link)
     region = m.group(1)
     name = m.group(2)
     id = m.group(3)
-    page = urlopen(url)
+    page = urlopen(link)
     soup = BeautifulSoup(page, 'html.parser')
 
     geo = soup.find('meta', {'name':"geo.position"})
@@ -79,6 +80,25 @@ def scrape(link):
 
     body = soup.find('section', {'id':'postingbody'})
     body = body.get_text(strip=False) if body else None
+    content = {
+        'id': id,
+        'url': url,
+        'name': name,
+        'region': region,
+        'geo': geo,
+        'placename': placename,
+        'title': title,
+        'image': image,
+        'price': price,
+        'housing': housing,
+        'bedrooms': bedrooms,
+        'sqft': sqft,
+        'address': address,
+        'gmaps': gmaps,
+        'attributes': attributes,
+        'body': body,
+        }
+    return(content)
 
 
 

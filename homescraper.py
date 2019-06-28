@@ -1,10 +1,6 @@
-import feedparser
-import re
-from urllib.request import urlopen
-import urllib.request
-from bs4 import BeautifulSoup
 import helper
 import iohandler
+import sys
 
 
 #get user info
@@ -19,13 +15,15 @@ import iohandler
 
 #target = GetInput()
 class Homescraper:
-    def __init__(self):
-        self.target = iohandler.get_input()
+    def __init__(self, dbname):
+        self.target = iohandler.get_input(sys.argv[1:])
         self.region = helper.get_region()
         self.urls = helper.get_new_listings(self.region)
         for url in self.urls:
-            content = helper.scrape(url)
-            print(content)
+            if dbhelper.not_in(dbname, url):
+                print("here")
+        #    content = helper.scrape(url)
+        #    print(content)
         #    if dbhelper.not_in(content["id"]):
         #        dbhelper.save_to_db(content)
         #        if dbhelper.check_rank(content['id']) <= 20:
@@ -34,8 +32,7 @@ class Homescraper:
         #            print(content)
 
 
-test = Homescraper()
-
+test = Homescraper('test')
 
 #def __init__:
 #
