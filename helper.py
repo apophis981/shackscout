@@ -28,18 +28,51 @@ def get_region():
     return found
 
 def get_new_listings(region):
+    """
+    Checks local rss feed and returns urls of newest listings
+
+    Parameters:
+    region: local craigslist region ex. sfbay
+    Returns list of string urls
+    """
     rssfeed = 'https://' + region + '.craigslist.org/search/apa?format=rss'
     parsed = feedparser.parse(rssfeed)
-    urls = (parsed['items']) if parsed else []
+    items = (parsed['items']) if parsed else []
+    urls = []
+    for item in items:
+        urls.append(item['id'])
     return urls
 
-def scrape(link):
-    print(link)
-    m = re.search('.*\/([a-z]+)\/apa\/d\/([^\/]+)\/(\d+)\.html', link)
+
+def parse_url(url):
+    """
+    Reads craigslist url and extracts region, name, and id of listing
+
+    Parameters:
+    url: craigslist apartment listing url
+    Returns string relating to craigslist region
+    """
+    m = re.search('.*\/([a-z]+)\/apa\/d\/([^\/]+)\/(\d+)\.html', url)
     region = m.group(1)
     name = m.group(2)
     id = m.group(3)
-    page = urlopen(link)
+    return(region, name, id)
+
+
+def scrape(url):
+    """
+    Scrapes craigslist apartment listing and returns apartment details
+
+    Uses python library BeautifulSoup to visit the craigslist apartment listing
+    provided and grab all important apartment information and returns a
+    dictionary containing all of the info
+
+    Parameters:
+    url: craigslist apartment listing url
+    Returns:
+    content: dictionary containing apartment info
+    """
+    page = urlopen(url)
     soup = BeautifulSoup(page, 'html.parser')
 
     geo = soup.find('meta', {'name':"geo.position"})
@@ -65,9 +98,17 @@ def scrape(link):
     if housing:
         if 'br' in housing:
             b = re.search('.* (\d+)br', housing)
+
+            # Case: "1br -"
+            if b is None:
+                b = re.search('(\d+)br.*', housing)
             bedrooms = int(b.group(1))
         if 'ft' in housing:
             f = re.search('.* (\d+)ft', housing)
+
+            # Case: "700ft -"
+            if f is None:
+                f = re.search('(\d+)ft.*', housing)
             sqft = int(f.group(1))
 
     address = soup.find('div', {'class':'mapaddress'})
@@ -80,11 +121,8 @@ def scrape(link):
 
     body = soup.find('section', {'id':'postingbody'})
     body = body.get_text(strip=False) if body else None
+
     content = {
-        'id': id,
-        'url': url,
-        'name': name,
-        'region': region,
         'geo': geo,
         'placename': placename,
         'title': title,
@@ -98,44 +136,5 @@ def scrape(link):
         'attributes': attributes,
         'body': body,
         }
+
     return(content)
-
-
-
-
-#def __init__:
-#
-#
-
-#items = (d['items'])
-#print("Found", len(items), "items")
-#for item in items:
-#    url = item['id']
-#
-#            post_data = {
-#                'id': id,
-#                'url': url,
-#                'name': name,
-#                'region': region,
-#                'geo': geo,
-#                'placename': placename,
-#                'title': title,
-#                'image': image,
-#                'price': price,
-#                'housing': housing,
-#                'bedrooms': bedrooms,
-#                'sqft': sqft,
-#                'address': address,
-#                'gmaps': gmaps,
-#                'attributes': attributes,
-#                'body': body,
-#                }
-#
-#            result = posts.insert_one(post_data)
-#            print('One post: {0}'.format(result.inserted_id))
-#
-#    cursor.close()
-#    conn.close()
-#except Exception as e:
-#    print("Uh oh, can't connect. Invalid dbname, user or password?")
-#    print(e)
