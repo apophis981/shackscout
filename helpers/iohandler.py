@@ -1,6 +1,12 @@
 import argparse
 
 def get_input(input_args):
+    """
+    Gathers command line input and return parsed input arguements
+
+    Parameters: List of input args
+    Returns parsed args
+    """
     parser = argparse.ArgumentParser(description='Get user search specifics')
 
     # Mandatory arguements

@@ -1,6 +1,6 @@
 # Python code to demonstrate working of unittest
 import unittest
-import iohandler
+from helpers import iohandler
 import argparse
 
 class IOhandlerTests(unittest.TestCase):

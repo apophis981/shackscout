@@ -1,6 +1,6 @@
 # Python code to demonstrate working of unittest
 import unittest
-import helper
+from helpers import helper
 import validators
 
 
@@ -9,7 +9,7 @@ class HelperTests(unittest.TestCase):
 	def setUp(self):
 		self.region = helper.get_region()
 		self.urls = helper.get_new_listings(self.region)
-		#self.post_data = helper.scrape(self.urls[0])
+		self.post_data = helper.scrape(self.urls[0])
 		pass
 
 	def test_get_region_string(self):

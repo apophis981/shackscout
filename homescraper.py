@@ -1,6 +1,4 @@
-import helper
-import iohandler
-import dbhelper
+from helpers import helper, iohandler, dbhelper, matcher
 import sys
 from pymongo import MongoClient
 
@@ -44,6 +42,11 @@ class Homescraper:
                      'url': url,
                      })
                 dbhelper.post(content, self.posts)
+                if matcher.matches_search(content, self.target):
+                    print("Found one listing that matches!")
+                    print(content['url'])
+                # Check if it is a matching listing
+                    # Notify user
 
 search = Homescraper()
 search.scrape_latest_results()

@@ -117,7 +117,9 @@ def scrape(url):
     gmaps = soup.find('p', {'class':'mapaddress'}).find('a')["href"]
 
     attrgroup = soup.find_all('p', {'class':'attrgroup'})
-    attributes = attrgroup[1].get_text(strip=False) if attrgroup else None
+    attributes = None
+    if attrgroup and len(attrgroup) > 1:
+        attributes = attrgroup[1].get_text(strip=False)
 
     body = soup.find('section', {'id':'postingbody'})
     body = body.get_text(strip=False) if body else None
