@@ -32,5 +32,8 @@ Optional args
 [-h] [--bedrooms] [--spacemin] [--spacemax] [--cats] [--dogs] [--wd]
 ```
 
-example:
-`python3 homescraper.py 5 37.557516 -122.287266 2000 3000 --bedrooms 1 --cats`
+### Example:
+
+```
+python3 homescraper.py 5 37.557516 -122.287266 2000 3000 --bedrooms 1 --cats
+```
