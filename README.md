@@ -21,8 +21,16 @@ Input search info as command arguments in the format shown below
 
 Arguments in [] are optional, arguments outside of brackets are mandatory
 ```
-python3 homescraper.py [-h] [--bedrooms] [--spacemin] [--spacemax] [--cats] [--dogs] [--wd]
-                      distance geo geo pricemin pricemax
+python3 homescraper.py [positional args] [optional args]
 ```
+Positional args:
+```
+distance geo geo pricemin pricemax
+```
+Optional args
+```
+[-h] [--bedrooms] [--spacemin] [--spacemax] [--cats] [--dogs] [--wd]
+```
+
 example:
 `python3 homescraper.py 5 37.557516 -122.287266 2000 3000 --bedrooms 1 --cats`
