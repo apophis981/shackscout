@@ -45,7 +45,6 @@ class Homescraper:
                 if matcher.matches_search(content, self.target):
                     print("Found one listing that matches!")
                     print(content['url'])
-                # Check if it is a matching listing
                     # Notify user
 
 search = Homescraper()
