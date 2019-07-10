@@ -41,10 +41,13 @@ class Homescraper:
                      'id': id,
                      'url': url,
                      })
+                score = matcher.calculate_score(content, self.target)
+                content.update({'score': score})
                 dbhelper.post(content, self.posts)
                 if matcher.matches_search(content, self.target):
                     print("Found one listing that matches!")
                     print(content['url'])
+                    print(content['score'])
                     # Notify user
 
 search = Homescraper()
