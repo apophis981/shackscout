@@ -72,6 +72,7 @@ def scrape(url):
     Returns:
     content: dictionary containing apartment info
     """
+    print("Scraping: " + url)
     page = urlopen(url)
     soup = BeautifulSoup(page, 'html.parser')
 
@@ -114,7 +115,8 @@ def scrape(url):
     address = soup.find('div', {'class':'mapaddress'})
     address = address.get_text(strip=True) if address else None
 
-    gmaps = soup.find('p', {'class':'mapaddress'}).find('a')["href"]
+    gmaps = soup.find('p', {'class':'mapaddress'})
+    gmaps = gmaps.find('a')["href"] if gmaps else None
 
     attrgroup = soup.find_all('p', {'class':'attrgroup'})
     attributes = None
