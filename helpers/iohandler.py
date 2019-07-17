@@ -1,4 +1,5 @@
 import argparse
+import datetime
 
 def get_input(input_args):
     """
@@ -20,6 +21,9 @@ def get_input(input_args):
         help='maximum price for listing')
 
     # Optional arguements
+    parser.add_argument('--date',
+                        type=lambda s: datetime.datetime.strptime(s, '%d/%m/%Y'),
+                        help='Date separated by "/" ex: 21/10/2019')
     parser.add_argument('--bedrooms', type=int, metavar='#',
                         help='Minimum number of bedrooms')
     parser.add_argument('--spacemin', type=int, metavar='###',

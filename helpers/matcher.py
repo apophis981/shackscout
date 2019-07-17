@@ -17,7 +17,8 @@ def distance_value(target_geo, target_distance, coords):
 def calculate_score(content, target):
     price = price_value(target.pricemin, target.pricemax, content['price'])
     distance = distance_value(target.geo, target.distance, content['geo'])
-    return(price * distance)
+    date = date_value(target.date, content["date"])
+    return(price * distance * date)
 
 def matches_search(content, target):
     score = calculate_score(content, target)

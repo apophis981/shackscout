@@ -118,11 +118,14 @@ def scrape(url):
 
     attrgroup = soup.find_all('p', {'class':'attrgroup'})
     attributes = None
+    date = None
     if attrgroup and len(attrgroup) > 1:
         attributes = attrgroup[1].get_text(strip=False)
+        date = attrgroup.find('span', {'class':'housing_movein_now property_date shared-line-bubble'})["data-date"]
 
     body = soup.find('section', {'id':'postingbody'})
     body = body.get_text(strip=False) if body else None
+
 
     content = {
         'geo': geo,
@@ -137,6 +140,7 @@ def scrape(url):
         'gmaps': gmaps,
         'attributes': attributes,
         'body': body,
+        'date': date,
         }
 
     return(content)
