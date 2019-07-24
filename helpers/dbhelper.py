@@ -20,4 +20,5 @@ def post(content, db):
     db: pointer to database
     """
     result = db.insert_one(content)
-    print('One post: {0}'.format(result.inserted_id))
+    #print('One post: {0}'.format(result.inserted_id))
+    print('One post: ', content["url"])

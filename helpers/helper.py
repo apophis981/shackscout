@@ -3,6 +3,7 @@ import re
 import urllib.request
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 def get_region():
     """
@@ -14,16 +15,17 @@ def get_region():
     Parameters: None
     Returns string relating to craigslist region
     """
+    url = 'https://craigslist.org'
     found = None
-    with urllib.request.urlopen('https://craigslist.org/') as response:
+    with urllib.request.urlopen(url) as response:
         redirect = response.geturl()
         m = re.search('.*\/([a-z]+)\.craigslist\.org', redirect)
         if m:
             found = m.group(1)
-        if found == 'www' or None:
-            print("Region discovery failed")
-            print("Please enter your local region such that")
-            found = input(
+            if found == 'www' or None:
+                print("Region discovery failed")
+                print("Please enter your local region such that")
+                found = input(
                 '[your region].craigslist.org goes to your local craigslist page: ')
     return found
 
@@ -118,14 +120,18 @@ def scrape(url):
 
     attrgroup = soup.find_all('p', {'class':'attrgroup'})
     attributes = None
-    date = None
     if attrgroup and len(attrgroup) > 1:
         attributes = attrgroup[1].get_text(strip=False)
-        date = attrgroup.find('span', {'class':'housing_movein_now property_date shared-line-bubble'})["data-date"]
 
     body = soup.find('section', {'id':'postingbody'})
     body = body.get_text(strip=False) if body else None
 
+    date = soup.find_all('span', {'class':'housing_movein_now property_date shared-line-bubble'})
+    if date:
+        date = date[0]["data-date"]
+        date = datetime.strptime(date, '%Y-%m-%d')
+    else:
+        date = None
 
     content = {
         'geo': geo,

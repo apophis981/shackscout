@@ -14,6 +14,13 @@ def distance_value(target_geo, target_distance, coords):
          return(2 - (distance/half_range))
      return 0
 
+def date_value(target_date, page_date):
+    if target_date == None or page_date == None:
+        return  1
+    if page_date > target_date:
+        return 0
+    return 1
+
 def calculate_score(content, target):
     price = price_value(target.pricemin, target.pricemax, content['price'])
     distance = distance_value(target.geo, target.distance, content['geo'])

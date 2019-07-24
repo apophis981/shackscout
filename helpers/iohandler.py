@@ -22,8 +22,8 @@ def get_input(input_args):
 
     # Optional arguements
     parser.add_argument('--date',
-                        type=lambda s: datetime.datetime.strptime(s, '%d/%m/%Y'),
-                        help='Date separated by "/" ex: 21/10/2019')
+                        type=lambda s: datetime.datetime.strptime(s, '%m/%d/%Y'),
+                        help='Date separated by "/" ex: 10/21/2019')
     parser.add_argument('--bedrooms', type=int, metavar='#',
                         help='Minimum number of bedrooms')
     parser.add_argument('--spacemin', type=int, metavar='###',
