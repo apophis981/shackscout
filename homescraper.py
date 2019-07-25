@@ -16,9 +16,6 @@ class Homescraper:
         # Determine local craislist region
         self.region = helper.get_region()
 
-        # Find most recent listings
-        self.urls = helper.get_new_listings(self.region)
-
     def scrape_latest_results(self):
         """
         Main execution of homescraper
@@ -31,6 +28,8 @@ class Homescraper:
         Parameters: None
         Returns nothing
         """
+        # Find most recent listings
+        self.urls = helper.get_new_listings(self.region)
         for url in self.urls:
             region, name, id = helper.parse_url(url)
             if dbhelper.not_in(id, self.posts):

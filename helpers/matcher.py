@@ -53,6 +53,12 @@ def cats_value(target_cats, cats):
             return 0
     return 1
 
+def cats_value(target_wd, wd):
+    if target_wd and wd != None:
+        if 'w/d in unit' not in wd:
+            return 0
+    return 1
+
 def calculate_score(content, target):
     price = price_value(target.pricemin, target.pricemax, content['price'])
     distance = distance_value(target.geo, target.distance, content['geo'])
@@ -61,7 +67,7 @@ def calculate_score(content, target):
     sqft = sqft_value(target.sqft, content['sqft'])
     dogs = dogs_value(target.dogs, content['attributes'])
     cats = cats_value(target.cats, content['attributes'])
-    #wd = wd_value(target.wd, content['attributes'])
+    wd = wd_value(target.wd, content['attributes'])
     #print(price, distance, date, bedrooms, sqft, dogs, cats)
     return(price * distance * date * bedrooms * sqft * dogs * cats)
 
