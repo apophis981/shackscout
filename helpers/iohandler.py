@@ -26,10 +26,8 @@ def get_input(input_args):
                         help='Date separated by "/" ex: 10/21/2019')
     parser.add_argument('--bedrooms', type=int, metavar='#',
                         help='Minimum number of bedrooms')
-    parser.add_argument('--spacemin', type=int, metavar='###',
+    parser.add_argument('--sqft', type=int, metavar='###',
                         help='Minimum square footage')
-    parser.add_argument('--spacemax', type=int, metavar='####',
-                        help='Maximum square footage')
     parser.add_argument('--cats', help='Add if you want cats allowed',
                         action='store_true')
     parser.add_argument('--dogs', help='Add if you want dogs allowed',

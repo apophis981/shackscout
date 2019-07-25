@@ -35,6 +35,9 @@ class Homescraper:
             region, name, id = helper.parse_url(url)
             if dbhelper.not_in(id, self.posts):
                 content = helper.scrape(url)
+                # Skip listing if page has been removed by user
+                if content['placename'] == None:
+                    continue
                 content.update(
                     {'region': region,
                      'name': name,
