@@ -48,9 +48,15 @@ class Homescraper:
                 dbhelper.post(content, self.posts)
                 if matcher.matches_search(content, self.target):
                     print("Found one listing that matches!")
-                    print(content['url'])
-                    print(content['score'])
-                    # Notify user
+                    print("score:", content['score'], content['url'])
+                    score_rank =  dbhelper.score_rank(id, self.posts)
+                    if score_rank <= 20:
+                        print("TOP 20")
+                        # Notify user
+
+    def print_top(self, n):
+        dbhelper.print_top(n, self.posts)
 
 search = Homescraper()
 search.scrape_latest_results()
+search.print_top(10)

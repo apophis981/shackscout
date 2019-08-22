@@ -2,7 +2,7 @@ from geopy.distance import great_circle
 import re
 
 def price_value(min, max, price):
-    if price >= min and price <= max:
+    if price != None and price >= min and price <= max:
         half_range = (max-min)/2
         normalized_price = price - min
         return (2 - (normalized_price/half_range))
@@ -53,7 +53,7 @@ def cats_value(target_cats, cats):
             return 0
     return 1
 
-def cats_value(target_wd, wd):
+def wd_value(target_wd, wd):
     if target_wd and wd != None:
         if 'w/d in unit' not in wd:
             return 0
@@ -68,7 +68,6 @@ def calculate_score(content, target):
     dogs = dogs_value(target.dogs, content['attributes'])
     cats = cats_value(target.cats, content['attributes'])
     wd = wd_value(target.wd, content['attributes'])
-    #print(price, distance, date, bedrooms, sqft, dogs, cats)
     return(price * distance * date * bedrooms * sqft * dogs * cats)
 
 def matches_search(content, target):
