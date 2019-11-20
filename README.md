@@ -1,4 +1,4 @@
-# Homescraper
+# shackscout
 Service for identifying new craigslist listings that are desirable and notifying
  when they become listed.
 
@@ -15,13 +15,13 @@ pip install -r requirements.txt
 `sudo service mongod start`
 
 ## Usage:
-For help run `python3 homescraper.py -h`
+For help run `python3 shackscout.py -h`
 
 Input search info as command arguments in the format shown below
 
 Arguments in [] are optional, arguments outside of brackets are mandatory
 ```
-python3 homescraper.py [positional args] [optional args]
+python3 shackscout.py [positional args] [optional args]
 ```
 Positional args:
 ```
@@ -35,5 +35,5 @@ Optional args
 ### Example:
 
 ```
-python3 homescraper.py 5 37.557516 -122.287266 2000 3000 --bedrooms 1 --cats
+python3 shackscout.py 5 37.557516 -122.287266 2000 3000 --bedrooms 1 --cats
 ```

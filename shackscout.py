@@ -2,12 +2,12 @@ from helpers import helper, iohandler, dbhelper, matcher
 import sys
 from pymongo import MongoClient
 
-class Homescraper:
+class Shackscout:
     def __init__(self):
 
         # Setup local database instance
         self.client = MongoClient()
-        self.db = self.client.homescraper
+        self.db = self.client.shackscout
         self.posts = self.db.posts
 
         # Get user search specifics
@@ -18,7 +18,7 @@ class Homescraper:
 
     def scrape_latest_results(self):
         """
-        Main execution of homescraper
+        Main execution of shackscout
 
         From the latest rss feed of apartment litsings in local craigslist
         for each of the apartment listings first check if that listing is
@@ -57,6 +57,6 @@ class Homescraper:
     def print_top(self, n):
         dbhelper.print_top(n, self.posts)
 
-search = Homescraper()
+search = Shackscout()
 search.scrape_latest_results()
 search.print_top(10)
